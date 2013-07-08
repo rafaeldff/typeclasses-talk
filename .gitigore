@@ -1,0 +1,6 @@
+.classpath
+.project
+.worksheet/
+bin/
+target/
+*.sw[o]p
