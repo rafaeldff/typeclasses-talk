@@ -71,24 +71,23 @@ object numbers {
 	  
   }
   
-  Use.baskara(3, 4, 5)                            //> res0: Int = -44
+  Use.baskara(3, 4, 5)
   
   //Use.baskara(3.0, 4.0, 5.0)
   
   //Use.baskara(BigInt(3), BigInt(4), BigInt(5))
   
-  implicit val stringNumeric = new Numeric[String] {
+  implicit val stringNumLike = new NumLike[String] {
 	  def plus(x: String, y: String): String  = s"($x+$y)"
 	  def minus(x: String, y: String): String = s"($x-$y)"
 	  def times(x: String, y: String): String = s"($x*$y)"
-	  def negate(x: String): String						= s"-$x"
+	  def div(x: String, y:String): String		= s"($x/$y)"
 	  def fromInt(x: Int): String							= x.toString
-	  def toInt(x: String): Int								= ???
-	  def toLong(x: String): Long							= ???
-	  def toFloat(x: String): Float						= ???
-	  def toDouble(x: String): Double					= ???
-	  def compare(a:String,b:String) 					= 0
-  }                                               //> stringNumeric  : Numeric[String] = numbers$$anonfun$main$1$$anon$1@3da02d7
+	  def lte[B: BoolLike](x:Int, y:Int): B = {
+				implicitly[BoolLike[B]].fromBoolean(x <= y)
+			}
+  }
+  
  // Use.baskara("a", "b", "c")
   
   
