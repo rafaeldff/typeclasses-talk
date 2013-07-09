@@ -71,13 +71,13 @@ object numbers {
 	  
   }
   
-  Use.baskara(3, 4, 5)
+  Use.baskara(3, 4, 5)                            //> res0: Int = -44
   
   //Use.baskara(3.0, 4.0, 5.0)
   
   //Use.baskara(BigInt(3), BigInt(4), BigInt(5))
   
-  implicit val stringNumLike = new NumLike[String] {
+  /*implicit val stringNumLike = new NumLike[String] {
 	  def plus(x: String, y: String): String  = s"($x+$y)"
 	  def minus(x: String, y: String): String = s"($x-$y)"
 	  def times(x: String, y: String): String = s"($x*$y)"
@@ -86,9 +86,9 @@ object numbers {
 	  def lte[B: BoolLike](x:Int, y:Int): B = {
 				implicitly[BoolLike[B]].fromBoolean(x <= y)
 			}
-  }
+  }*/
   
  // Use.baskara("a", "b", "c")
   
-  
+ 0                                                //> res1: Int(0) = 0
 }
