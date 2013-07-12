@@ -1,8 +1,10 @@
 package numbers
 package my
 
-import scala.math.Numeric
+import scala.Ordering.Implicits.infixOrderingOps
 import scala.math.Fractional
+import scala.math.Fractional.Implicits.infixFractionalOps
+import scala.math.Numeric
 
 object math {
   import Fractional.Implicits._
@@ -10,15 +12,15 @@ object math {
 
   def pow[N: Fractional](n: N, e: Int): N =
     if (e == 0)
-      implicitly[Numeric[N]].one
+      implicitly[Numeric[N]].fromInt(1)
     else
       n * pow(n, e - 1)
-
   
   def sqrt[N: Fractional](x: N): N = {
     val helper = implicitly[Fractional[N]]
+    val ord = implicitly[Ordering[N]]
     import helper.fromInt
-    val precision = fromInt(1) / fromInt(10000)
+    val precision = helper.div(fromInt(1), fromInt(10000))
     
     def squareRootIter(guess: N, x: N): N =
       if (goodEnough(guess))
@@ -27,15 +29,15 @@ object math {
         squareRootIter(improveGuess(guess), x)
 
     def improveGuess(guess: N): N =
-      average(guess, x / guess)
+      average(guess, helper.div(x, guess))
 
     def goodEnough(guess: N) =
-      (square(guess) - x).abs < precision
+      ord.lt(helper.abs(helper.minus(square(guess), x)),  precision)
     
      def average(x: N, y: N) : N =
-        (x + y) / fromInt(2)
+        helper.div(helper.plus(x, y), fromInt(2))
      
-     def square(value : N): N = value * value
+     def square(value : N): N = helper.times(value, value)
 
     squareRootIter(fromInt(1), x)
   }
