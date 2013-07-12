@@ -1,13 +1,15 @@
 package comparing
 
-object LibDinheiro {
+object LibDinheiro {                      //nosso código, em outro arquivo
   import java.util.Comparator
-  
+
   case class Dinheiro(val centavos:Int)
+  
   implicit val comparaDinheiro = new Comparator[Dinheiro] {
     def compare(a:Dinheiro, b:Dinheiro) =
       b.centavos - a.centavos
   }
+  
 }
 
 object s06 {
@@ -27,4 +29,3 @@ object s06 {
   sort( List(Dinheiro(3), Dinheiro(2), Dinheiro(1)) )
   
 }
-// Implicits para dinheiro. Precisa sempre importar o implicit val?

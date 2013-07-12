@@ -1,6 +1,6 @@
 package comparing
 
-object TimeLib {
+object TimeLib {                          //lib de terceiros
   case class Timestamp(val millis:Int)
   object Timestamp {
     def today = new Timestamp(0)
@@ -20,7 +20,6 @@ object s02 {
         sort(smaller) ::: x :: sort(larger)
     }
   
-   // sort( List(Timestamp.today, Timestamp.yesterday) )  
+   //! sort( List(Timestamp.today, Timestamp.yesterday) )  
   
 }
-// Comparable offers no support for 3rd party libs 

@@ -1,6 +1,6 @@
 package comparing
 
-object LibDinheiro2 {
+object LibDinheiro2 {                     //nosso código, em outro arquivo
   import java.util.Comparator
   
   case class Dinheiro(val centavos: Int)
@@ -16,6 +16,8 @@ object s07 {
   import java.util.Comparator
   import LibDinheiro2.Dinheiro
 
+  
+  
   def sort[T](list: List[T])(implicit comparator: Comparator[T]): List[T] = 
     list match {
       case _ :: Nil | Nil => list
@@ -24,7 +26,6 @@ object s07 {
         sort(smaller)(comparator) ::: x :: sort(larger)(comparator)
     }
 
-  sort(List(Dinheiro(3), Dinheiro(2), Dinheiro(1)))
+  sort( List(Dinheiro(3), Dinheiro(2), Dinheiro(1)) )
 
 }
-//Implicit search FTW

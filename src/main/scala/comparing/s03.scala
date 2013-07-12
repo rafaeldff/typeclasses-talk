@@ -21,4 +21,3 @@ object s03 {
   sort( List(Dinheiro(3), Dinheiro(2), Dinheiro(1)) )(comparaDinheiro)
   
 }
-// Alternative: Comparator

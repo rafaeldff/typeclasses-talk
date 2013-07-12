@@ -24,4 +24,3 @@ object s04 {
   sort( List(Timestamp.yesterday, Timestamp.today) )(Collections.reverseOrder(comparaTimestamps))
 
 }
-// Comparator offer support for 3d party libs

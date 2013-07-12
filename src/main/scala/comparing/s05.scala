@@ -1,6 +1,7 @@
 package comparing
 
 object s05 {
+  
   import java.util.Comparator
 
   import TimeLib.Timestamp
@@ -19,5 +20,6 @@ object s05 {
     }
 
   sort( List(Timestamp.yesterday, Timestamp.today) )
+  
+  
 }
-//Implicits! Ja temos typeclasses

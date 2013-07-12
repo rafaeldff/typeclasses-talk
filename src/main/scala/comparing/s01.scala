@@ -18,4 +18,3 @@ object s01 {
   sort( List(new Dinheiro(3), new Dinheiro(2), new Dinheiro(1)) )
   
 }
-// Comparable[Dinheiro]
