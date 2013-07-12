@@ -13,28 +13,26 @@ object s14 {
     def lt(a: N, b: N): Boolean
   }
 
+  def sum[N](nums: List[N])(implicit num: Num[N]) =
+    nums.reduce((a, b) => num.plus(a, b))
+
+  def average[N](nums: List[N])(implicit num: Num[N]) =
+    num.div(sum(nums), num.fromInt(nums.size))
+
+  def stdDev[N](nums: List[N])(implicit num: Num[N]) =
+    sqrt(average(nums.map { n => pow(num.minus(n, average(nums)), 2) }))
+
   object Num {
     implicit val doublesAreNums = new Num[Double] {
-      def plus(a: Double, b: Double):  Double  = a + b
-      def minus(a: Double, b: Double): Double  = a - b
-      def times(a: Double, b: Double): Double  = a * b
-      def div(a: Double, b: Double):   Double  = a / b
-      def fromInt(i: Int):             Double  = i.toDouble
-      def lt(a: Double, b: Double):    Boolean = a < b
+      def plus(a: Double, b: Double): Double = a + b
+      def minus(a: Double, b: Double): Double = a - b
+      def times(a: Double, b: Double): Double = a * b
+      def div(a: Double, b: Double): Double = a / b
+      def fromInt(i: Int): Double = i.toDouble
+      def lt(a: Double, b: Double): Boolean = a < b
     }
   }
-
-  import comparing.LibDinheiro2._
-
-  def sum[N](nums: List[N])(implicit fractional: Num[N]) =
-    nums.reduce((a, b) => fractional.plus(a, b))
-
-  def average[N](nums: List[N])(implicit fractional: Num[N]) =
-    fractional.div(sum(nums), fractional.fromInt(nums.size))
-
-  def stdDev[N](nums: List[N])(implicit fractional: Num[N]) =
-    sqrt(average(nums.map { n => pow(fractional.minus(n, average(nums)), 2) }))
-
+  
   val doubles = List(54.37, 22.43, 42.57)
   average(doubles)
 

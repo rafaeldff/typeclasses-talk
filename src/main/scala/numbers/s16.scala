@@ -1,7 +1,7 @@
 package numbers
-import my.math15._
+import my.math16._
 
-object s15 {
+object s16 {
   case class Dinheiro(valor:Double)
   
   trait Num[N] {
@@ -11,16 +11,25 @@ object s15 {
     def div(a: N, b: N): N
     def fromInt(i: Int): N
     def lt(a: N, b: N): Boolean
+    
+    class Ops(a:N) {
+      def +(b:N):N       = plus(a,b)
+      def -(b:N):N       = minus(a,b)
+      def /(b:N):N       = div(a,b)
+      def <(b:N):Boolean = lt(a,b)
+    }
   }
+  
+  implicit def enableInfix[N](n:N)(implicit num: Num[N]): Num[N]#Ops = new num.Ops(n)
 
-  def sum[N](nums: List[N])(implicit num: Num[N]) =
-    nums.reduce((a, b) => num.plus(a, b))
+  def sum[N: Num](nums: List[N]) =
+    nums.reduce(_ + _)
 
-  def average[N](nums: List[N])(implicit num: Num[N]) =
-    num.div(sum(nums), num.fromInt(nums.size))
+  def average[N](nums: List[N])(implicit fractional: Num[N]) =
+    sum(nums) / fractional.fromInt(nums.size)
 
-  def stdDev[N](nums: List[N])(implicit num: Num[N]) =
-    sqrt(average(nums.map { n => pow(num.minus(n, average(nums)), 2) }))
+  def stdDev[N: Num](nums: List[N]) =
+    sqrt(average(nums.map { n => pow((n - average(nums)), 2) }))
 
   object Num {
     implicit val dinheirosAreNums = new Num[Dinheiro] {
