@@ -3,11 +3,11 @@ package comparing
 object s03 {
   import java.util.Comparator
   
-  case class Dinheiro(val centavos:Int)  
+  case class Dinheiro(val valor:Double)  
   
   val comparaDinheiro = new Comparator[Dinheiro] {
     def compare(a:Dinheiro, b:Dinheiro) =
-      b.centavos - a.centavos
+      (b.valor - a.valor).toInt
   }
   
   def sort[T](list: List[T])(comparator: Comparator[T]):List[T] = 

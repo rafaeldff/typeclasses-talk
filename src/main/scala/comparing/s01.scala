@@ -2,9 +2,9 @@ package comparing
 
 object s01 {
   
-  case class Dinheiro(val centavos:Long) extends java.lang.Comparable[Dinheiro] {
+  case class Dinheiro(val valor:Double) extends java.lang.Comparable[Dinheiro] {
     def compareTo(outro:Dinheiro):Int =
-      this.centavos compareTo outro.centavos
+      this.valor compareTo outro.valor
   }
   
   def sort[T <: Comparable[T]](list: List[T]):List[T] = 

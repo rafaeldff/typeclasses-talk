@@ -3,11 +3,11 @@ package comparing
 object LibDinheiro2 {                     //nosso código, em outro arquivo
   import java.util.Comparator
   
-  case class Dinheiro(val centavos: Int)
+  case class Dinheiro(val centavos: Double)
   object Dinheiro {
     implicit val comparaDinheiro = new Comparator[Dinheiro] {
       def compare(a: Dinheiro, b: Dinheiro) =
-        b.centavos - a.centavos
+        (b.centavos - a.centavos).toInt
     }
   }
 }
