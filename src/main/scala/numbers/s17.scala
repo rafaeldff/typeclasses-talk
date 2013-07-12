@@ -1,7 +1,7 @@
 package numbers
-import my.math16._
+import my.math17._
 
-object s16 {
+object s17 {
   case class Dinheiro(valor:Double)
   
   trait Num[N] {
@@ -21,12 +21,15 @@ object s16 {
   }
   
   implicit def enableInfix[N](n:N)(implicit num: Num[N]): Num[N]#Ops = new num.Ops(n)
+  implicit class ConvertsToNum(val i:Int) extends AnyVal {
+    def asNum[N:Num] = implicitly[Num[N]].fromInt(i)
+  }
 
   def sum[N: Num](nums: List[N]) =
     nums.reduce(_ + _)
 
-  def average[N](nums: List[N])(implicit fractional: Num[N]) =
-    sum(nums) / fractional.fromInt(nums.size)
+  def average[N: Num](nums: List[N]) =
+    sum(nums) / nums.size.asNum
 
   def stdDev[N: Num](nums: List[N]) =
     sqrt(average(nums.map { n => pow((n - average(nums)), 2) }))
@@ -48,4 +51,4 @@ object s16 {
   val dinheiros = List(Dinheiro(42.00), Dinheiro(31.50))
   average(dinheiros)
 }
-//TC impl for dinheiros
+//TC impl for dinheiros 
