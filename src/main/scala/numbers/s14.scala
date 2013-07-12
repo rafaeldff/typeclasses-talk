@@ -1,7 +1,7 @@
 package numbers
-import my.math13._
+import my.math14._
 
-object s13 {
+object s14 {
   case class Dinheiro(valor:Double)
   
   trait Num[N] {
@@ -12,7 +12,20 @@ object s13 {
     def fromInt(i: Int): N
     def lt(a: N, b: N): Boolean
   }
-  
+
+  object Num {
+    implicit val doublesAreNums = new Num[Double] {
+      def plus(a: Double, b: Double):  Double  = a + b
+      def minus(a: Double, b: Double): Double  = a - b
+      def times(a: Double, b: Double): Double  = a * b
+      def div(a: Double, b: Double):   Double  = a / b
+      def fromInt(i: Int):             Double  = i.toDouble
+      def lt(a: Double, b: Double):    Boolean = a < b
+    }
+  }
+
+  import comparing.LibDinheiro2._
+
   def sum[N](nums: List[N])(implicit fractional: Num[N]) =
     nums.reduce((a, b) => fractional.plus(a, b))
 
@@ -23,9 +36,9 @@ object s13 {
     sqrt(average(nums.map { n => pow(fractional.minus(n, average(nums)), 2) }))
 
   val doubles = List(54.37, 22.43, 42.57)
-  //! average(doubles)
+  average(doubles)
 
   val dinheiros = List(Dinheiro(42.00), Dinheiro(31.50))
   //! average(dinheiros)
 }
-// Typeclass
+//TC impl for doubles

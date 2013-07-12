@@ -9,7 +9,6 @@ object s12 {
   
   def average(nums: List[Double]) = 
     sum(nums) / nums.size
-  
     
   def stdDev(nums: List[Double]) = 
     sqrt( average( nums.map{n => pow(n - average(nums), 2)}) )
@@ -20,4 +19,4 @@ object s12 {
   val dinheiros = List(Dinheiro(42.00), Dinheiro(31.50))
   //! average(dinheiros)
 }
-//Doubles
+//Doubles (nao dinheiros)
