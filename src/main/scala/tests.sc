@@ -42,10 +42,12 @@ object tesxprts {
     def size(l: List[T])(implicit ev: Num[N]):N = l.size.asNum[N]
   }                                               //> listsAreFoldable: [T, N]=> tesxprts.Foldable[List,T,N]
   
-  case class Expr(e:String, vars:Set[String]=HashSet()) {
-    def toFunction = s"""function(${vars.mkString(",")}) {
+  case class Expr(e:String, vars:Set[String]=HashSet(), valueIsStatement:Boolean=true) {
+    def toFunction = s"""
+    function(${vars.mkString(",")}) {
       $e
     }"""
+        
   }
   var latest = -1                                 //> latest  : Int = -1
   def reset = {latest = -1}                       //> reset: => Unit
@@ -68,7 +70,7 @@ object tesxprts {
     def squareRoot(a:Expr): Expr        = Expr(s"sqrt(${a.e})", a.vars)
     override def negate(a:Expr): Expr            = Expr(s"-${a.e}", a.vars)
   }                                               //> expressionsAreNums  : tesxprts.Num[tesxprts.Expr] = tesxprts$$anonfun$main$
-                                                  //| 1$$anon$2@6587f194
+                                                  //| 1$$anon$2@40055f9f
                                                   
   type FoldableExpression[T] = Expr
   
@@ -90,11 +92,14 @@ object tesxprts {
     
     def size(l:Expr)(implicit ev: Num[Expr]):Expr = Expr(s"${l.e}.length")
   }                                               //> numExpressionsAreFoldable  : tesxprts.Foldable[tesxprts.FoldableExpression,
-                                                  //| tesxprts.Expr,tesxprts.Expr] = tesxprts$$anonfun$main$1$$anon$3@42e6bc11
+                                                  //| tesxprts.Expr,tesxprts.Expr] = tesxprts$$anonfun$main$1$$anon$3@3a452267
   
   def aPlusB[N:Num](a:N,b:N) = a + b              //> aPlusB: [N](a: N, b: N)(implicit evidence$2: tesxprts.Num[N])N
   
-  aPlusB(fresh, fresh); reset                     //> res0: tesxprts.Expr = Expr((a + b),Set(a, b))
+  aPlusB(fresh, fresh).toFunction; reset          //> res0: String = "
+                                                  //|     function(a,b) {
+                                                  //|       (a + b)
+                                                  //|     }"
   
   def roots[N:Num](a:N, b:N, c:N):N = {
     val delta:N = (b*b - 4.asNum[N] * a * c)
@@ -111,7 +116,8 @@ object tesxprts {
                                                   //| plicit num: tesxprts.Num[N])N
   
   
-  println(sum(freshFoldable).toFunction); reset   //> function(a) {
+  println(sum(freshFoldable).toFunction); reset   //> 
+                                                  //|     function(a) {
                                                   //|       
                                                   //|       var c = 0;
                                                   //|       
@@ -124,7 +130,8 @@ object tesxprts {
                                                   //|       
                                                   //|     }
   
-  println(average(freshFoldable).toFunction)      //> function(a) {
+  println(average(freshFoldable).toFunction)//ERR //> 
+                                                  //|     function(a) {
                                                   //|       (
                                                   //|       var c = 0;
                                                   //|       
@@ -145,8 +152,8 @@ object tesxprts {
       def fromInt(i: Int): Double = i.toDouble
       def lt(a: Double, b: Double): Boolean = a < b
       def squareRoot(n: Double): Double = scala.math.sqrt(n)
-    }                                             //> doublesAreNums  : tesxprts.Num[Double] = tesxprts$$anonfun$main$1$$anon$4@9
-                                                  //| 876148
+    }                                             //> doublesAreNums  : tesxprts.Num[Double] = tesxprts$$anonfun$main$1$$anon$4@3
+                                                  //| d4038ba
   
   sum(List(1.0,2.0,10.0))                         //> res1: Double = 13.0
   
