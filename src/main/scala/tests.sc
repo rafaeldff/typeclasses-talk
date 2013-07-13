@@ -29,15 +29,14 @@ object tesxprts {
     def asNum[N:Num] = implicitly[Num[N]].fromInt(i)
   }
   
-  trait Foldable[C[_],T] {
-    //def foldRight[T,R](l: C[T])(t:R)(f: (T,R)=>R):R
-    def foldRight(l: C[T])(t:T)(f: (T,T)=>T):T
+  trait Foldable[C,T] {
+    def foldRight(l: C)(t:T)(f: (T,T)=>T):T
   }
   
-  implicit def listsAreFoldable[T] = new Foldable[List,T] {
+  implicit def listsAreFoldable[T] = new Foldable[List[T],T] {
     def foldRight(l: List[T])(t:T)(f: (T,T)=>T):T =
      l.foldRight(t)(f)
-  }                                               //> listsAreFoldable: [T]=> tesxprts.Foldable[List,T]
+  }                                               //> listsAreFoldable: [T]=> tesxprts.Foldable[List[T],T]
   
   case class Expr(e:String, vars:Set[String]=HashSet()) {
     def toFunction = s"""function(${vars.mkString(",")}) {
@@ -68,14 +67,14 @@ object tesxprts {
   case class ArrayExpr[T](e:String)
   def freshArray:ArrayExpr[Expr] = {latest += 1; val newVar = dict(latest).toString; ArrayExpr(newVar)}
                                                   //> freshArray: => tesxprts.ArrayExpr[tesxprts.Expr]
-  implicit def numExpressionsAreFoldable[T: Num] = new Foldable[ArrayExpr, Expr] {
-    def foldRight(l: ArrayExpr[Expr])(t:Expr)(f: (Expr,Expr)=>Expr):Expr ={
+  implicit def numExpressionsAreFoldable[T: Num] = new Foldable[Expr,Expr] {
+    def foldRight(l: Expr)(t:Expr)(f: (Expr,Expr)=>Expr):Expr ={
       val arg1 = fresh
       val arg2 = fresh
       Expr(s"${l.e}.fold(${t.e})(function(${arg1.e},${arg2.e}) {${f(arg1,arg2).e})")
     }
   }                                               //> numExpressionsAreFoldable: [T](implicit evidence$2: tesxprts.Num[T])tesxprt
-                                                  //| s.Foldable[tesxprts.ArrayExpr,tesxprts.Expr]
+                                                  //| s.Foldable[tesxprts.Expr,tesxprts.Expr]
   
   def aPlusB[N:Num](a:N,b:N) = a + b              //> aPlusB: [N](a: N, b: N)(implicit evidence$3: tesxprts.Num[N])N
   
@@ -89,13 +88,12 @@ object tesxprts {
   roots(fresh, fresh, fresh).toFunction           //> res1: String = function(d,e,c) {
                                                   //|       ((-d + sqrt(((d * d) - ((4 * c) * e)))) / (2 * c))
                                                   //|     }
-  def sum[N:Num,L[_]](l:L[N])(implicit foldable: Foldable[L,N]):N =
-    implicitly[Foldable[L,N]].foldRight(l)(0.asNum[N])(_ + _)
-                                                  //> sum: [N, L[_]](l: L[N])(implicit evidence$5: tesxprts.Num[N], implicit fold
-                                                  //| able: tesxprts.Foldable[L,N])N
+  def sum[N:Num,L](l:L)(implicit foldable: Foldable[L,N]):N =
+    foldable.foldRight(l)(0.asNum[N])(_ + _)      //> sum: [N, L](l: L)(implicit evidence$5: tesxprts.Num[N], implicit foldable: 
+                                                  //| tesxprts.Foldable[L,N])N
+ 
   
-  
-  sum(freshArray).toFunction                      //> res2: String = function() {
+  sum(fresh).toFunction                           //> res2: String = function() {
                                                   //|       f.fold(0)(function(g,h) {(g + h))
                                                   //|     }
   
