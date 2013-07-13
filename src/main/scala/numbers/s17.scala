@@ -45,9 +45,6 @@ object s17 {
     }
   }
   
-
-  
-  
   val dinheiros = List(Dinheiro(42.00), Dinheiro(31.50))
   average(dinheiros)
 }

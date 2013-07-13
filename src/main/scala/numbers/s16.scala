@@ -22,6 +22,9 @@ object s16 {
   
   implicit def enableInfix[N](n:N)(implicit num: Num[N]): Num[N]#Ops = new num.Ops(n)
 
+  
+  
+  
   def sum[N: Num](nums: List[N]) =
     nums.reduce(_ + _)
 
@@ -41,9 +44,6 @@ object s16 {
       def lt(a: Dinheiro, b: Dinheiro): Boolean = a.valor < b.valor
     }
   }
-  
-
-  
   
   val dinheiros = List(Dinheiro(42.00), Dinheiro(31.50))
   average(dinheiros)
