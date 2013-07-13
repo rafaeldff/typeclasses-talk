@@ -12,7 +12,7 @@ object s21 {
     def div(a: Code, b: Code): Code     = Code(s"(${a.e} / ${b.e})")
     def fromInt(i: Int): Code           = Code(i.toString)
     def lt(a: Code, b: Code): Boolean   = false
-    def squareRoot(a:Code): Code        = Code(s"sqrt(${a.e})")
+    def squareRoot(a:Code): Code        = Code(s"Math.sqrt(${a.e})")
   }      
   
   def root[N:Num](a:N, b:N, c:N):N = {

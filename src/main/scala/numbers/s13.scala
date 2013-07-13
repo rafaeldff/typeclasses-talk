@@ -14,7 +14,7 @@ object s13 {
   }
   
   def sum[N](numeros: List[N])(implicit num: Num[N]) =
-    numeros.reduce((a, b) => num.plus(a, b))
+    numeros.foldRight(num.fromInt(0))((a, b) => num.plus(a, b))
 
   def average[N](numeros: List[N])(implicit num: Num[N]) =
     num.div(sum(numeros), num.fromInt(numeros.size))
