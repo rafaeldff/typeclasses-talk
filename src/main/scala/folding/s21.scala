@@ -3,9 +3,11 @@ package folding
 object s21 {
   import NumTypeclass._
   
-  trait Foldable[C]
+  trait Foldable[L[_],T] {
+    def foldRight(l: L[T])(t:T)(f: (T,T)=>T):T
+  }
   
-  def sum[N: Num, F: Foldable](nums: F[N]) =
-    nums.foldRight(0.asNum)(_ + _)
+  def sum[N: Num,L[_]](nums: L[N])(implicit foldable: Foldable[L,N]) =
+    foldable.foldRight(nums)(0.asNum)(_ + _)
 
 }

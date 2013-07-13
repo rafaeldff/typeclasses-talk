@@ -66,7 +66,7 @@ object noavg {
     def squareRoot(a:Expr): Expr        = Expr(s"sqrt(${a.e})", a.vars)
     override def negate(a:Expr): Expr            = Expr(s"-${a.e}", a.vars)
   }                                               //> expressionsAreNums  : noavg.Num[noavg.Expr] = noavg$$anonfun$main$1$$anon$2
-                                                  //| @31c74456
+                                                  //| @115783a2
                                                   
   type FoldableExpression[T] = Expr
   
@@ -86,7 +86,7 @@ object noavg {
       """, l.vars ++ t.vars)
     }
   }                                               //> numExpressionsAreFoldable  : noavg.Foldable[noavg.FoldableExpression,noavg.
-                                                  //| Expr] = noavg$$anonfun$main$1$$anon$3@5462a19d
+                                                  //| Expr] = noavg$$anonfun$main$1$$anon$3@176075b3
   
   def aPlusB[N:Num](a:N,b:N) = a + b              //> aPlusB: [N](a: N, b: N)(implicit evidence$2: noavg.Num[N])N
   
@@ -104,9 +104,9 @@ object noavg {
                                                   //|     function(b,a,c) {
                                                   //|       ((-b + sqrt(((b * b) - ((4 * a) * c)))) / (2 * a))
                                                   //|     }"
-  def sum[N,L[_]](l:L[N])(implicit foldable: Foldable[L,N], num: Num[N]):N =
-    foldable.foldRight(l)(0.asNum[N])(_ + _)      //> sum: [N, L[_]](l: L[N])(implicit foldable: noavg.Foldable[L,N], implicit nu
-                                                  //| m: noavg.Num[N])N
+  def sum[N: Num,L[_]](l:L[N])(implicit foldable: Foldable[L,N]):N =
+    foldable.foldRight(l)(0.asNum[N])(_ + _)      //> sum: [N, L[_]](l: L[N])(implicit evidence$4: noavg.Num[N], implicit foldabl
+                                                  //| e: noavg.Foldable[L,N])N
  
   
   println(sum(freshFoldable).toFunction); reset   //> 
@@ -132,8 +132,8 @@ object noavg {
       def fromInt(i: Int): Double = i.toDouble
       def lt(a: Double, b: Double): Boolean = a < b
       def squareRoot(n: Double): Double = scala.math.sqrt(n)
-    }                                             //> doublesAreNums  : noavg.Num[Double] = noavg$$anonfun$main$1$$anon$4@228ef30
-                                                  //| 5
+    }                                             //> doublesAreNums  : noavg.Num[Double] = noavg$$anonfun$main$1$$anon$4@56f4def
+                                                  //| c
   
   sum(List(1.0,2.0,10.0))                         //> res2: Double = 13.0
   
