@@ -26,7 +26,7 @@ object s17 {
   }
 
   def sum[N: Num](nums: List[N]) =
-    nums.reduce(_ + _)
+    nums.foldRight(0.asNum)(_ + _)
 
   def average[N: Num](nums: List[N]) =
     sum(nums) / nums.size.asNum
@@ -48,4 +48,3 @@ object s17 {
   val dinheiros = List(Dinheiro(42.00), Dinheiro(31.50))
   average(dinheiros)
 }
-//TC impl for dinheiros 

@@ -25,11 +25,11 @@ object s16 {
   
   
   
-  def sum[N: Num](nums: List[N]) =
-    nums.reduce(_ + _)
+  def sum[N](nums: List[N])(implicit num: Num[N])  =
+    nums.foldRight(num.fromInt(0))(_ + _)
 
-  def average[N](nums: List[N])(implicit fractional: Num[N]) =
-    sum(nums) / fractional.fromInt(nums.size)
+  def average[N](nums: List[N])(implicit num: Num[N]) =
+    sum(nums) / num.fromInt(nums.size)
 
   def stdDev[N: Num](nums: List[N]) =
     sqrt(average(nums.map { n => pow((n - average(nums)), 2) }))
