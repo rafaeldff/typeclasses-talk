@@ -4,14 +4,14 @@ import scala.math._
 object s12 {
   case class Dinheiro(valor:Double)
   
-  def sum(nums: List[Double]) = 
-    nums.reduce(_ + _)
+  def sum(numeros: List[Double]) = 
+    numeros.reduce(_ + _)
   
-  def average(nums: List[Double]) = 
-    sum(nums) / nums.size
+  def average(numeros: List[Double]) = 
+    sum(numeros) / numeros.size
     
-  def stdDev(nums: List[Double]) = 
-    sqrt( average( nums.map{n => pow(n - average(nums), 2)}) )
+  def stdDev(numeros: List[Double]) = 
+    sqrt( average( numeros.map{n => pow(n - average(numeros), 2)}) )
   
   val doubles = List(54.37, 22.43, 42.57)
   average(doubles)
