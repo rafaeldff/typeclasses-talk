@@ -33,10 +33,10 @@ object noavg {
     def foldRight(l: C[T])(t:T)(f: (T,T)=>T):T
   }
   
-  implicit def listsAreFoldable[T,N] = new Foldable[List,T] {
+  implicit def listsAreFoldable[T] = new Foldable[List,T] {
     def foldRight(l: List[T])(t:T)(f: (T,T)=>T):T =
      l.foldRight(t)(f)
-  }                                               //> listsAreFoldable: [T, N]=> noavg.Foldable[List,T]
+  }                                               //> listsAreFoldable: [T]=> noavg.Foldable[List,T]
   
   case class Expr(e:String, vars:Set[String]=HashSet(), valueIsStatement:Boolean=true) {
     def toFunction = s"""
@@ -66,7 +66,7 @@ object noavg {
     def squareRoot(a:Expr): Expr        = Expr(s"sqrt(${a.e})", a.vars)
     override def negate(a:Expr): Expr            = Expr(s"-${a.e}", a.vars)
   }                                               //> expressionsAreNums  : noavg.Num[noavg.Expr] = noavg$$anonfun$main$1$$anon$2
-                                                  //| @115783a2
+                                                  //| @31c74456
                                                   
   type FoldableExpression[T] = Expr
   
@@ -86,7 +86,7 @@ object noavg {
       """, l.vars ++ t.vars)
     }
   }                                               //> numExpressionsAreFoldable  : noavg.Foldable[noavg.FoldableExpression,noavg.
-                                                  //| Expr] = noavg$$anonfun$main$1$$anon$3@176075b3
+                                                  //| Expr] = noavg$$anonfun$main$1$$anon$3@5462a19d
   
   def aPlusB[N:Num](a:N,b:N) = a + b              //> aPlusB: [N](a: N, b: N)(implicit evidence$2: noavg.Num[N])N
   
@@ -132,8 +132,8 @@ object noavg {
       def fromInt(i: Int): Double = i.toDouble
       def lt(a: Double, b: Double): Boolean = a < b
       def squareRoot(n: Double): Double = scala.math.sqrt(n)
-    }                                             //> doublesAreNums  : noavg.Num[Double] = noavg$$anonfun$main$1$$anon$4@56f4def
-                                                  //| c
+    }                                             //> doublesAreNums  : noavg.Num[Double] = noavg$$anonfun$main$1$$anon$4@26ae58e
+                                                  //| 9
   
   sum(List(1.0,2.0,10.0))                         //> res2: Double = 13.0
   
