@@ -4,7 +4,7 @@ package folding
 import my.FoldingTypeclass._
 import Code._
 
-object CodingFoldingInstance {
+object CodingFoldableInstance {
   
   implicit val numExpressionsAreFoldable = new Foldable[FoldableCode, Code] {
     def foldRight(l: Code)(t: Code)(f: (Code, Code) => Code): Code = {
