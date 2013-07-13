@@ -20,4 +20,6 @@ object Code {
     val newVar = s"x$count" 
     Code(newVar, Seq(newVar))
   }
+  
+  def freshFoldableVar[T]: FoldableCode[T] = freshVar
 }
