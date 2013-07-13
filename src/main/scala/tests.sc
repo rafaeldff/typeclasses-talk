@@ -68,15 +68,24 @@ object tesxprts {
     def squareRoot(a:Expr): Expr        = Expr(s"sqrt(${a.e})", a.vars)
     override def negate(a:Expr): Expr            = Expr(s"-${a.e}", a.vars)
   }                                               //> expressionsAreNums  : tesxprts.Num[tesxprts.Expr] = tesxprts$$anonfun$main$
-                                                  //| 1$$anon$2@252119
+                                                  //| 1$$anon$2@6587f194
                                                   
   type FoldableExpression[T] = Expr
   
   implicit val numExpressionsAreFoldable = new Foldable[FoldableExpression,Expr,Expr] {
     def foldRight(l: Expr)(t:Expr)(f: (Expr,Expr)=>Expr):Expr ={
-      val arg1 = fresh
-      val arg2 = fresh
-      Expr(s"${l.e}.fold(${t.e})(function(${arg1.e},${arg2.e}) {${f(arg1,arg2).e})")
+      val varElement = fresh
+      val varResult = fresh
+      Expr(s"""
+      var ${varResult.e} = ${t.e};
+      
+      for (i in ${l.e}) {
+        ${varElement.e} = ${l.e}[i];
+        ${varResult.e} = ${f(varElement, varResult).e};
+      }
+      
+      return ${varResult.e};
+      """, l.vars ++ t.vars)
     }
     
     def size(l:Expr)(implicit ev: Num[Expr]):Expr = Expr(s"${l.e}.length")
@@ -102,12 +111,31 @@ object tesxprts {
                                                   //| plicit num: tesxprts.Num[N])N
   
   
-  sum(freshFoldable).toFunction; reset            //> res1: String = function() {
-                                                  //|       a.fold(0)(function(b,c) {(b + c))
+  println(sum(freshFoldable).toFunction); reset   //> function(a) {
+                                                  //|       
+                                                  //|       var c = 0;
+                                                  //|       
+                                                  //|       for (i in a) {
+                                                  //|         b = a[i];
+                                                  //|         c = (b + c);
+                                                  //|       }
+                                                  //|       
+                                                  //|       return c;
+                                                  //|       
                                                   //|     }
   
-  average(freshFoldable)                          //> res2: tesxprts.Expr = Expr((a.fold(0)(function(b,c) {(b + c)) / a.length),S
-                                                  //| et())
+  println(average(freshFoldable).toFunction)      //> function(a) {
+                                                  //|       (
+                                                  //|       var c = 0;
+                                                  //|       
+                                                  //|       for (i in a) {
+                                                  //|         b = a[i];
+                                                  //|         c = (b + c);
+                                                  //|       }
+                                                  //|       
+                                                  //|       return c;
+                                                  //|        / a.length)
+                                                  //|     }
   
   implicit val doublesAreNums = new Num[Double] {
       def plus(a: Double, b: Double): Double = a + b
@@ -117,11 +145,11 @@ object tesxprts {
       def fromInt(i: Int): Double = i.toDouble
       def lt(a: Double, b: Double): Boolean = a < b
       def squareRoot(n: Double): Double = scala.math.sqrt(n)
-    }                                             //> doublesAreNums  : tesxprts.Num[Double] = tesxprts$$anonfun$main$1$$anon$4@a
-                                                  //| f66eac
+    }                                             //> doublesAreNums  : tesxprts.Num[Double] = tesxprts$$anonfun$main$1$$anon$4@9
+                                                  //| 876148
   
-  sum(List(1.0,2.0,10.0))                         //> res3: Double = 13.0
+  sum(List(1.0,2.0,10.0))                         //> res1: Double = 13.0
   
-  average(List(1.0,2.0,10.0))                     //> res4: Double = 4.333333333333333
+  average(List(1.0,2.0,10.0))                     //> res2: Double = 4.333333333333333
                                                     
 }
