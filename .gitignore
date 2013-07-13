@@ -4,3 +4,5 @@
 bin/
 target/
 *.sw[o]p
+.cache
+*.log
